@@ -1,7 +1,8 @@
 const express = require('express')
 const app = require('express')()
 var http = require('http');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const command = require('nodemon/lib/config/command');
 let db_link = 'mongodb://127.0.0.1/testing'
 const EmpModel = require('./emp_db');
 const TestRoutes = require('./routes')
@@ -17,6 +18,7 @@ try {
 } catch (err) {
     console.log("Not Connected to Database ERROR! 1");
     send_email_admin("Not Connected to Database ERROR! ")
+    // shutdown command: service mongod stop
 };
 
 
