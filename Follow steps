@@ -1,0 +1,11 @@
+1. please create a first admin, use this api (create_frist_admin_employee) 
+2. use login api and get _id (please pass vid params in all the api header)
+2. create a company, use this api  (update_company)
+    1.ref (company id) create automatically and its unique
+3.create a employee, use this api  (update_employee)
+    1.please use this roles:[admin,manager,employee];
+    2.ref (employee id) create automatically and its unique
+4.Manage the roles, use this api  (update_employee)
+5.get company this api fetch company record
+6.get employee this api fetch employee record
+7.get_subordinate thi api fetch all manager and subordinate users

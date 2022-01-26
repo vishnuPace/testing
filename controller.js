@@ -170,7 +170,7 @@ exports.get_subordinate = async (req, res) => {
                 $lookup: {
                     from: "emp_dbs",
                     let: { c_id: '$company_id', e_id: '$_id' },
-                    as: "co worker", // please consider subordinates
+                    as: "subordinates", 
                     pipeline: [
                         {
                             $match: {
@@ -179,8 +179,8 @@ exports.get_subordinate = async (req, res) => {
                                     $and:
                                         [
                                             { $eq: ["$company_id", "$$c_id"] },
-                                            { $eq: ["$role", "employee"] },
-                                            { $ne: ['$_id', "$$e_id"] }
+                                            { $eq: ['$manager_id', "$$e_id"] },
+                                            { $ne: ['$_id', "$$e_id"] },
                                         ]
                                 }
                             }
