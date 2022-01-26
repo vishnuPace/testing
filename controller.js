@@ -7,14 +7,14 @@ const req = require('express/lib/request');
 exports.login = async (req, res) => {
     try {
         var req = req.body
-        let find_data ={
-            email:req.email,
-            password:req.password
+        let find_data = {
+            email: req.email,
+            password: req.password
         }
         let data = await EmpModel.findOne(find_data).lean()
-        if(data && data._id){
+        if (data && data._id) {
             return res.send({ status: true, message: "login sucess", data })
-        }else{
+        } else {
             return res.send({ status: true, message: "login failed", data })
         }
     } catch (error) {
@@ -25,7 +25,15 @@ exports.login = async (req, res) => {
 exports.update_employee = async (req, res) => {
     try {
         var req = req.body
-
+        if (req['manager_id']) {
+            if (req['_id'] && req['_id'] === req['manager_id']) {
+                return res.send({ status: false, message: "You can't assign to you" })
+            }
+            let manager_data = await EmpModel.findOne({ _id: req['manager_id'], role: "manager", is_delete: false }).lean()
+            if (!manager_data) {
+                return res.send({ status: false, message: "Manager id params invalid" })
+            }
+        }
         if (req._id) {
             let find_data = { "_id": req._id }
             let update_data = req
@@ -37,6 +45,7 @@ exports.update_employee = async (req, res) => {
             if (!req.company_id) {
                 return res.send({ status: false, message: "Company id params required" })
             }
+
             var newEmployee = new EmpModel(req);
             let data = await newEmployee.save()
             return res.send({ status: true, message: "data fetched", data })
@@ -161,7 +170,7 @@ exports.get_subordinate = async (req, res) => {
                 $lookup: {
                     from: "emp_dbs",
                     let: { c_id: '$company_id', e_id: '$_id' },
-                    as: "co worker",
+                    as: "co worker", // please consider subordinates
                     pipeline: [
                         {
                             $match: {
@@ -182,7 +191,7 @@ exports.get_subordinate = async (req, res) => {
             {
                 $lookup: {
                     from: "emp_dbs",
-                    let: { c_id: '$company_id' },
+                    let: { c_id: '$company_id',m_id: '$manager_id' },
                     as: "reporting_manager",
                     pipeline: [
                         {
@@ -192,7 +201,8 @@ exports.get_subordinate = async (req, res) => {
                                     $and:
                                         [
                                             { $eq: ["$company_id", "$$c_id"] },
-                                            { $eq: ["$role", "manager"] }
+                                            { $eq: ["$role", "manager"] },
+                                            { $eq: ['$_id', "$$m_id"] }
                                         ]
                                 }
                             }

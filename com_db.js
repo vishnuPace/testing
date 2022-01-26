@@ -15,6 +15,7 @@ var schemaOptions = {
 var com_dbSchema = new Schema({
     name: { type: String },
     ref: { type: String, 'default': shortid.generate,unique:true },
+    is_delete: { type: Boolean, default: false },
 }, schemaOptions);
 
 var com_db = mongoose.model('com_db', com_dbSchema);

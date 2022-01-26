@@ -17,7 +17,9 @@ var emp_dbSchema = new Schema({
     email: { type: String },
     phone_number: { type: String },
     role: { type: String, default: "employee" },
+    is_delete: { type: Boolean, default: false },
     company_id: { type: mongoose.Schema.Types.ObjectId },
+    manager_id: { type: mongoose.Schema.Types.ObjectId },
     ref: { type: String, 'default': shortid.generate, unique: true },
 }, schemaOptions);
 
