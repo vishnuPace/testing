@@ -31,7 +31,7 @@ app.use(express.urlencoded({
 
 app.use(async (req, res, next) => {
     var vid = req.headers['vid']
-    if (['/api/create_frist_admin_employee'].includes(req.url)) {
+    if (['/api/create_frist_admin_employee','/api/login'].includes(req.url)) {
         next()
     } else {
         if (!vid) {

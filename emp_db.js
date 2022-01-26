@@ -14,6 +14,8 @@ var schemaOptions = {
 //create emp_db schema 
 var emp_dbSchema = new Schema({
     name: { type: String },
+    email: { type: String },
+    phone_number: { type: String },
     role: { type: String, default: "employee" },
     company_id: { type: mongoose.Schema.Types.ObjectId },
     ref: { type: String, 'default': shortid.generate, unique: true },
